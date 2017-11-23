@@ -1,19 +1,27 @@
-var MyModule = {};
+var MyModule = (function () {
+	
+	var privateVar1 = 'SOME TEXT';
+	var privateVar2 = 100;
 
-MyModule = (function () {
-	var v1, v2, v3;
-
-	function privateMethodOne() {
-
+	function privateMethodNotExposed() {
+		console.log(privateVar1 + 'from a private method not exposed');
 	}
 
+	function privateMethodToExpose() {
+		console.log('private method <privateMethodToExpose> called as <methodPublicOne>' );
+	}
+
+	function privateMethodToExposeTwo() {
+		privateMethodNotExposed();
+	}
 	return {
-		publicMethod: function () {
-
-		},
-
-		otherPublicMethod () {
-
-		}
+		methodPublicOne: privateMethodToExpose,
+		methodPublicUsingPrivateMethodInside: privateMethodToExposeTwo
 	}
 }());
+
+MyModule.methodPublicOne();
+MyModule.methodPublicUsingPrivateMethodInside();
+MyModule.privateMethodNotExposed(); // this not work, nice
+
+// todo: Use real example
